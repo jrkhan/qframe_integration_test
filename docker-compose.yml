@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:13.1
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "qframe", "-U", "qframe" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    environment:
+      - POSTGRES_USER=qframe
+      - POSTGRES_PASSWORD=qframe
+      - POSTGRES_DB=qframe
+    volumes:
+      - ./postgres_initdb:/docker-entrypoint-initdb.d/
+    ports:
+      - 127.0.0.1:5432:5432
+  mysql:
+    image: mysql:5.7
+    environment: 
+      - MYSQL_DATEBASE=qframe
+      - MYSQL_USER=qframe
+      - MYSQL_PASSWORD=qframe
+      - MYSQL_ROOT_PASSWORD=qframe
+    ports:
+      - 127.0.0.1:3306:3306
+    volumes:
+      - ./mysql_initdb:/docker-entrypoint-initdb.d/
